@@ -1,7 +1,7 @@
 ===================================
 OpenStack Manila driver for FreeNAS
 ===================================
-	Manila is the name of project which provides ‘Shared file system Service’ for OpenStack. The source code in this directory represents manila driver implementation for FreeNAS. Where FreeSAN is Free and Open Source Network Attached Storage(NAS) software appliance. SO the driver code here is FreeNAS specific only and hence can not work with other storage appliances. This implementation supports NFS protocol, other protocols like CIFS etc.
+Manila is the name of project which provides ‘Shared file system Service’ for OpenStack. The source code in this directory represents manila driver implementation for FreeNAS. Where FreeSAN is Free and Open Source Network Attached Storage(NAS) software appliance. SO the driver code here is FreeNAS specific only and hence can not work with other storage appliances. This implementation supports NFS protocol, other protocols like CIFS etc.
 
 Files
 -----
@@ -18,7 +18,7 @@ Setup
 
 Installation
 ------------
-	Below are the steps user need to follow for installation on OpenStack or Devstack Setup-
+Below are the steps user need to follow for installation on OpenStack or Devstack Setup-
 * Put this folder at manila driver path (e.g. /opt/stack/manila/manila/share/drivers/ )
 * Edit the /etc/manila/manila.conf file as described in “Configuration section” below.
 * Restart manila services.
@@ -33,7 +33,7 @@ TODO
 
 Configuration
 -------------
-	User need to edit /etc/manila/manila.conf file as per their own setup details.
+User need to edit /etc/manila/manila.conf file as per their own setup details.
 
 * In the [DEFAULT] section add/edit following line-
 	enabled_share_backends = <name of the manila driver implemented> (  e.g. freenas )
