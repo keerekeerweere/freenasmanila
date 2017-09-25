@@ -19,6 +19,7 @@ Setup
 Installation
 ------------
 Below are the steps user need to follow for installation on OpenStack or Devstack Setup-
+
 * Put this folder at manila driver path (e.g. /opt/stack/manila/manila/share/drivers/ )
 * Edit the /etc/manila/manila.conf file as described in “Configuration section” below.
 * Restart manila services.
@@ -40,6 +41,7 @@ User need to edit /etc/manila/manila.conf file as per their own setup details.
 
 
 * Add following section in the manila.conf file-
+
 	[freenas]
  	share_driver = manila.share.drivers.freenas.driver.FreeNasDriver 
 	freenas_server_hostname = <IP address of FreeNAS appliance> 
@@ -51,6 +53,7 @@ User need to edit /etc/manila/manila.conf file as per their own setup details.
 Note
 ----
 In case any difficulties please feel free to reachout us-
+
 Ram Suradkar <ram@agattilabs.com>,
 Jitendra Pawar <jitendra@agattilabs.com> OR
 info@agattilabs.com
