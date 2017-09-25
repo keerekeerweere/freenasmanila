@@ -1,7 +1,7 @@
 ===================================
 OpenStack Manila driver for FreeNAS
 ===================================
-Manila is the name of project which provides ‘Shared file system Service’ for OpenStack. The source code in this directory represents manila driver implementation for FreeNAS. Where FreeSAN is Free and Open Source Network Attached Storage(NAS) software appliance. SO the driver code here is FreeNAS specific only and hence can not work with other storage appliances. This implementation supports NFS protocol, other protocols like CIFS etc.
+Manila is the name of project which provides ‘Shared file system Service’ for OpenStack. The source code in this directory represents manila driver implementation for FreeNAS, where FreeNAS is Free and Open Source Network Attached Storage(NAS) software appliance. The driver code here is FreeNAS specific only and hence can not work with other storage appliances. This implementation supports NFS protocol, other protocols like CIFS etc.
 
 Files
 -----
@@ -37,23 +37,22 @@ Configuration
 User need to edit /etc/manila/manila.conf file as per their own setup details.
 
 * In the [DEFAULT] section add/edit following line-
-	enabled_share_backends = <name of the manila driver implemented> (  e.g. freenas )
-
+        enabled_share_backends = <name of the manila driver implemented> (  e.g. freenas )
 
 * Add following section in the manila.conf file-
 
-	[freenas]
- 	share_driver = manila.share.drivers.freenas.driver.FreeNasDriver 
-	freenas_server_hostname = <IP address of FreeNAS appliance> 
-	freenas_login = <username for login to FreeNAS appliance> 
-	freenas_password = <Password of above user for FreeNAS appliance> 
-	share_backend_name = <Name of the backend vendor> e.g. freenas
-	driver_handles_share_servers = False
+        [freenas]
+                share_driver = manila.share.drivers.freenas.driver.FreeNasDriver 
+                freenas_server_hostname = <IP address of FreeNAS appliance> 
+                freenas_login = <username for login to FreeNAS appliance> 
+                freenas_password = <Password of above user for FreeNAS appliance> 
+                share_backend_name = <Name of the backend vendor> e.g. freenas
+                driver_handles_share_servers = False
 
 Note
 ----
 In case any difficulties please feel free to reachout us-
 
 Ram Suradkar <ram@agattilabs.com>,
-Jitendra Pawar <jitendra@agattilabs.com> OR
-info@agattilabs.com
+
+Jitendra Pawar <jitendra@agattilabs.com> OR info@agattilabs.com
