@@ -13,7 +13,7 @@
 #    under the License.
 
 
-# Helper utility for manilla nfs driver
+# Helper utility for manila nfs driver
 from oslo_log import log
 
 from manila import exception
@@ -135,10 +135,10 @@ class FreeNASProcessRequests(object):
         path = self._get_share_path(dataset['name'])
         return [self._get_location_path(path, share['share_proto'])]
 
-    def set_quota(self, share_name, new_size):
+    def set_quota(self, share, new_size):
         """Update quota size for freenas share. """
 
-        qt_params = utils.generate_share_name(share_name,
+        qt_params = utils.generate_share_name(share['name'],
                                               self._get_mount_path())
         qt_params['refquote'] = '%sG' % new_size
 
@@ -171,7 +171,7 @@ class FreeNASProcessRequests(object):
 
     def delete_share(self, share):
         """Delete share."""
-        share_name = utils.generate_share_name(share,
+        share_name = utils.generate_share_name(share['name'],
                                                self._get_mount_path())
 
         del_req = ("%s/%s/%s/%s/") % (FreeNASServer.REST_API_VOLUME,
@@ -231,15 +231,15 @@ class FreeNASProcessRequests(object):
             }],
         }
 
-    def create_snapshot(self, share_name, snapshot_name):
+    def create_snapshot(self, snapshot):
         """Create snapshot of given share. """
 
-        share_params = utils.generate_share_name(share_name,
+        share_params = utils.generate_share_name(snapshot['share']['name'],
                                                  self._get_mount_path())
         snap_params = {}
         snap_params['dataset'] = ('%s/%s') % (self.config.freenas_dataset,
                                               share_params['name'])
-        snap_params['name'] = utils.generate_snapshot_name(snapshot_name)
+        snap_params['name'] = utils.generate_snapshot_name(snapshot['name'])
         request_urn = ('%s/') % (FreeNASServer.REST_API_SNAPSHOT)
 
         LOG.debug('Snaps params %s', json.dumps(snap_params))
@@ -250,15 +250,16 @@ class FreeNASProcessRequests(object):
             raise FreeNASApiError('Unexpected error', msg)
 
         model_update = {'provider_location': '%s@%s' %
-                        (self._get_share_path(share_name), snapshot_name)}
+                        (self._get_share_path(snapshot['share']['name']),
+                         snapshot['name'])}
         return model_update
 
-    def delete_snapshot(self, share_name, snapshot_name):
+    def delete_snapshot(self, snapshot):
         """delete snapshot of given share. """
 
-        snap_params = utils.generate_share_name(share_name,
+        snap_params = utils.generate_share_name(snapshot['share']['name'],
                                                 self._get_mount_path())
-        snap_name = utils.generate_snapshot_name(snapshot_name)
+        snap_name = utils.generate_snapshot_name(snapshot['name'])
 
         request_urn = ('%s/%s/%s@%s/') % (FreeNASServer.REST_API_SNAPSHOT,
                                           self.config.freenas_dataset,

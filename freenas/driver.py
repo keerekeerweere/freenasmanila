@@ -1,4 +1,4 @@
-# Manilla driver for FreeNAS
+# Manila driver for FreeNAS
 # Copyright (c) 2017 Agatti Software Labs. All Rights Reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -25,9 +25,9 @@ VERSION = '1.0'
 LOG = log.getLogger(__name__)
 
 
-# FreeNAS Manilla driver main interface from OpenStack
+# FreeNAS Manila driver main interface from OpenStack
 class FreeNasDriver(driver.ShareDriver):
-    """Freenas Manilla Driver for NFS shares.
+    """Freenas Manila Driver for NFS shares.
 
     API version history:
         1.0 - Initial version.
@@ -35,7 +35,7 @@ class FreeNasDriver(driver.ShareDriver):
 
     def __init__(self, *args, **kwargs):
         """Do initialization."""
-        LOG.debug('Initializing FreeNAS Manilla NFS driver.')
+        LOG.debug('Initializing FreeNAS Manila NFS driver.')
         # TODO(RS-AGT): Add configuration options according to nfs/cifs share
         # in options.py, Currently now only NFS share is supported.
         super(FreeNasDriver, self).__init__(False, *args, **kwargs)
@@ -76,36 +76,34 @@ class FreeNasDriver(driver.ShareDriver):
 
     def create_share(self, context, share, share_server=None):
         """Create a NFS share."""
-        LOG.debug('Share Name:  %s', share['name'])
+        LOG.debug('Creating share:  %s', share['name'])
         return self.helper.create_dataset(share)
 
     def create_share_from_snapshot(self, context, share, snapshot,
                                    share_server=None):
-        LOG.debug('Old Share Name:  %s  Clone Share name %s',
-                  snapshot['share_name'], share['name'])
+        LOG.debug('Creating share: %s  from snapshot %s',
+                  share['name'], snapshot['name'])
         return self.helper.create_share_from_snapshot(share, snapshot)
 
     def delete_share(self, context, share, share_server=None):
         """Delete a share."""
-        LOG.debug('Deleting share %s.', share['name'])
-        self.helper.delete_share(share['name'])
+        LOG.debug('Deleting share %s:', share['name'])
+        self.helper.delete_share(share)
 
     def extend_share(self, share, new_size, share_server=None):
         """Extends a share."""
         LOG.debug('Extending share %(name)s to %(size)sG.', {
             'name': share['name'], 'size': new_size})
-        self.helper.set_quota(share['name'], new_size)
+        self.helper.set_quota(share, new_size)
 
     def create_snapshot(self, context, snapshot, share_server=None):
         """Create Snapshot"""
         LOG.debug('Creating a snapshot of share %s', snapshot['share_name'])
-        return self.helper.create_snapshot(snapshot['share']['name'],
-                                           snapshot['name'])
+        return self.helper.create_snapshot(snapshot)
 
     def delete_snapshot(self, context, snapshot, share_server=None):
         LOG.debug('Deleting a snapshot of share %s.', snapshot['share_name'])
-        self.helper.delete_snapshot(snapshot['share']['name'],
-                                    snapshot['name'])
+        self.helper.delete_snapshot(snapshot)
 
     def update_access(self, context, share, access_rules, add_rules,
                       delete_rules, share_server=None):

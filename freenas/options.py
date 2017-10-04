@@ -14,7 +14,7 @@
 
 from oslo_config import cfg
 
-# This file contains configuration options for FreeNAS Manilla driver.
+# This file contains configuration options for FreeNAS Manila driver.
 
 # FreeNAS appliance connection options
 freenas_connection_opts = [
