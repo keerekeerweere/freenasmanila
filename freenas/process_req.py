@@ -28,6 +28,7 @@ LOG = log.getLogger(__name__)
 # All the OpenStack share manila share related requests for FreeNAS are
 # Processed here and corresponding FreeNAS REST API formed and invoked.
 
+
 class FreeNASProcessRequests(object):
 
     def __init__(self, configuration):
@@ -38,6 +39,7 @@ class FreeNASProcessRequests(object):
             self.config.freenas_dataset_compression)
         self.dataset_dedupe = self.config.freenas_dataset_dedupe
         self.storage_protocol = 'NFS'
+        self.handle = None
 
     def _create_handle(self, **kwargs):
         """Instantiate handle (client) for API communication with
@@ -126,7 +128,7 @@ class FreeNASProcessRequests(object):
 
         LOG.debug('create dataset response : %s', json.dumps(ds_resp))
         if ds_resp['status'] != FreeNASServer.STATUS_OK:
-            msg = ('Error while creating dataset: %s' % ds_resp['response'])
+            msg = ('Error while creating dataset: %s' % ds_resp)
             raise FreeNASApiError('Unexpected error', msg)
 
         LOG.info('Created share %s for shareID %s',
@@ -161,7 +163,7 @@ class FreeNASProcessRequests(object):
     def _get_location_path(self, path, protocol):
         location = None
         if protocol == self.config.freenas_storage_protocol:
-            location = {'path': '%s:/%s' %
+            location = {'path': '%s:%s' %
                         (self.config.freenas_server_hostname,
                          path)}
         else:
@@ -189,9 +191,9 @@ class FreeNASProcessRequests(object):
             raise FreeNASApiError('Unexpected error', msg)
 
     def _get_share_path(self, share_name):
-        return '%s/%s/%s/' % (self.nfs_mount_point_base,
-                              self.config.freenas_dataset,
-                              share_name)
+        return '%s/%s/%s' % (self.nfs_mount_point_base,
+                             self.config.freenas_dataset,
+                             share_name)
 
     def _get_volume_stat(self):
 
@@ -250,8 +252,8 @@ class FreeNASProcessRequests(object):
             raise FreeNASApiError('Unexpected error', msg)
 
         model_update = {'provider_location': '%s@%s' %
-                        (self._get_share_path(snapshot['share']['name']),
-                         snapshot['name'])}
+                        (self._get_share_path(share_params['name']),
+                         snap_params['name'])}
         return model_update
 
     def delete_snapshot(self, snapshot):
